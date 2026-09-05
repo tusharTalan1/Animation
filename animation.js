@@ -29,6 +29,15 @@ class Star{
             this.alphaChange = -this.alphaChange;
         }
 
+        const dx = x - this.x;
+        const dy = y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 200){
+            this.x += dx * 0.0075;
+            this.y += dy * 0.0075;
+        }
+
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
