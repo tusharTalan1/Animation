@@ -5,11 +5,11 @@ canvas.height = window.innerHeight;
 
 let x = canvas.width / 2;
 let y = canvas.height / 2;
-let speed = 0.05;
+let speed = 0.01;
 
 const mouse = { x: undefined, y: undefined };
 
-window.addEventListener('mousemove', (e) =>{
+window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
 });
@@ -36,9 +36,11 @@ class Star{
         if (distance < 200){
             this.x += dx * 0.0075;
             this.y += dy * 0.0075;
+            this.x += (dy / distance) * 2;
+            this.y -= (dx / distance) * 2;
         }
 
-        if (distance < 80){
+        if (distance < 65){
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             return;
@@ -53,7 +55,7 @@ class Star{
 }
 
 const stars = [];
-for (let i = 0; i < 500; i++){
+for (let i = 0; i < 800; i++){
     stars.push(new Star(canvas.height, canvas.width));
 }
 
@@ -61,21 +63,24 @@ function animate(){
     context.fillStyle = 'rgba(0, 0, 0, 0.1)';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    stars.forEach(star =>{
+    stars.forEach(star=>{
         star.makeStar();
     });
 
     if (mouse.x !== undefined){
-        x += (mouse.x - x)* speed;
-        y += (mouse.y - y)* speed;
+        x += (mouse.x - x) * speed;
+        y += (mouse.y - y) * speed;
     }
 
+    const gradient = context.createRadialGradient(x, y, 60, x, y, 90);
+    gradient.addColorStop(0, 'black');
+    gradient.addColorStop(0.1, 'hsla(49, 96%, 76%, 1.00)');
+    gradient.addColorStop(0.4, 'rgba(255, 150, 0, 0.8)');
+    gradient.addColorStop(1, 'rgba(255, 150, 0, 0)');
+
     context.beginPath();
-    context.arc(x, y, 80, 0, Math.PI * 2, false);
-    context.lineWidth = 10;
-    context.strokeStyle = "white";
-    context.stroke();
-    context.fillStyle = "black";
+    context.arc(x, y, 90, 0, Math.PI * 2, false);
+    context.fillStyle = gradient;
     context.fill();
     context.closePath();
 
