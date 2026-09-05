@@ -1,18 +1,21 @@
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
-var windowHight = window.innerHeight;
-var windowWidth = window.innerWidth;
-canvas.width = windowWidth;
-canvas.height = windowHight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
+let x = canvas.width / 2;
+let y = canvas.height / 2;
+let speed = 0.05;
 
-let speedx = 3;
-let speedy = 3;
-let x = 99;
-let y = 99;
+const mouse = { x: undefined, y: undefined };
 
-class Star {
-    constructor(height, width) {
+window.addEventListener('mousemove', (e) =>{
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+class Star{
+    constructor(height, width){
         this.radius = Math.random() * 1.5;
         this.x = Math.random() * width;
         this.y = Math.random() * height;
@@ -20,9 +23,9 @@ class Star {
         this.alphaChange = (Math.random() * 0.02) + 0.005;
     }
 
-    makeStar() {
+    makeStar(){
         this.alpha += this.alphaChange;
-        if (this.alpha <= 0 || this.alpha >= 1) {
+        if (this.alpha <= 0 || this.alpha >= 1){
             this.alphaChange = -this.alphaChange;
         }
 
@@ -34,13 +37,10 @@ class Star {
     }
 }
 
-
-
 const stars = [];
 for (let i = 0; i < 500; i++){
     stars.push(new Star(canvas.height, canvas.width));
 }
-
 
 function animate(){
     context.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -50,6 +50,11 @@ function animate(){
         star.makeStar();
     });
 
+    if (mouse.x !== undefined){
+        x += (mouse.x - x)* speed;
+        y += (mouse.y - y)* speed;
+    }
+
     context.beginPath();
     context.arc(x, y, 80, 0, Math.PI * 2, false);
     context.lineWidth = 10;
@@ -57,21 +62,6 @@ function animate(){
     context.stroke();
     context.closePath();
 
-    x += speedx;
-    y += speedy;
-
     requestAnimationFrame(animate);
 }
 animate();
-
-
-
-
-
-
-
-
-
-
-
-
