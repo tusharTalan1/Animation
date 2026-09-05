@@ -15,6 +15,11 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.clientY;
 });
 
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
 class Star{
     constructor(height, width){
         this.radius = Math.random() * 1.5;
