@@ -56,13 +56,79 @@ class Star{
 }
 
 const stars = [];
-for (let i = 0; i < 800; i++){
+for (let i = 0; i < 1000; i++){
     stars.push(new Star(canvas.height, canvas.width));
+}
+
+function drawGrid(){
+    const gridSize = 80;
+    context.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    context.lineWidth = 1;
+
+    for (let i = -800; i <= canvas.width + 800; i += gridSize){
+        context.beginPath();
+        let isDrawing = false;
+        for (let j = -800; j <= canvas.height + 800; j += 10){
+            let dx = x - i;
+            let dy = y - j;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 50){
+                isDrawing = false;
+                continue;
+            }
+
+            let force = 12000 / distance;
+            if (force > distance - 50) force = distance - 50;
+
+            let warpedX = i + (dx / distance) * force;
+            let warpedY = j + (dy / distance) * force;
+
+            if (!isDrawing){
+                context.moveTo(warpedX, warpedY);
+                isDrawing = true;
+            } else {
+                context.lineTo(warpedX, warpedY);
+            }
+        }
+        context.stroke();
+    }
+
+    for (let j = -800; j <= canvas.height + 800; j += gridSize){
+        context.beginPath();
+        let isDrawing = false;
+        for (let i = -800; i <= canvas.width + 800; i += 10){
+            let dx = x - i;
+            let dy = y - j;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 50){
+                isDrawing = false;
+                continue;
+            }
+
+            let force = 12000 / distance;
+            if (force > distance - 50) force = distance - 50;
+
+            let warpedX = i + (dx / distance) * force;
+            let warpedY = j + (dy / distance) * force;
+
+            if (!isDrawing){
+                context.moveTo(warpedX, warpedY);
+                isDrawing = true;
+            } else {
+                context.lineTo(warpedX, warpedY);
+            }
+        }
+        context.stroke();
+    }
 }
 
 function animate(){
     context.fillStyle = 'rgba(0, 0, 0, 0.1)';
     context.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawGrid();
 
     stars.forEach(star=>{
         star.makeStar();
