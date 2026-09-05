@@ -38,6 +38,12 @@ class Star{
             this.y += dy * 0.0075;
         }
 
+        if (distance < 80){
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            return;
+        }
+
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
@@ -69,6 +75,8 @@ function animate(){
     context.lineWidth = 10;
     context.strokeStyle = "white";
     context.stroke();
+    context.fillStyle = "black";
+    context.fill();
     context.closePath();
 
     requestAnimationFrame(animate);
