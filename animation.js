@@ -6,6 +6,7 @@ canvas.height = window.innerHeight;
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 let speed = 0.01;
+let angle = 0;
 
 const mouse = { x: undefined, y: undefined };
 
@@ -34,10 +35,10 @@ class Star{
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 200){
-            this.x += dx * 0.0075;
-            this.y += dy * 0.0075;
-            this.x += (dy / distance) * 2;
-            this.y -= (dx / distance) * 2;
+            this.x += dx * 0.005;
+            this.y += dy * 0.005;
+            this.x += (dy / distance) * 4;
+            this.y -= (dx / distance) * 4;
         }
 
         if (distance < 65){
@@ -72,17 +73,51 @@ function animate(){
         y += (mouse.y - y) * speed;
     }
 
-    const gradient = context.createRadialGradient(x, y, 60, x, y, 90);
+    const gradient = context.createRadialGradient(x, y, 50, x, y, 100);
     gradient.addColorStop(0, 'black');
     gradient.addColorStop(0.1, 'hsla(49, 96%, 76%, 1.00)');
-    gradient.addColorStop(0.4, 'rgba(255, 150, 0, 0.8)');
+    gradient.addColorStop(0.4, 'rgba(184, 194, 38, 0.65)');
     gradient.addColorStop(1, 'rgba(255, 150, 0, 0)');
 
+    context.save();
+    context.shadowBlur = 40;
+    context.shadowColor = 'rgba(184, 194, 38, 1)';
     context.beginPath();
     context.arc(x, y, 90, 0, Math.PI * 2, false);
     context.fillStyle = gradient;
     context.fill();
     context.closePath();
+    context.restore();
+
+    context.save();
+    context.translate(x, y);
+    context.rotate(angle);
+
+    context.globalCompositeOperation = "lighter";
+
+    context.beginPath();
+    context.arc(0, 0, 70, 0, Math.PI * 1.2, false);
+    context.lineWidth = 5;
+    context.lineCap = "round";
+    context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    context.shadowBlur = 15;
+    context.shadowColor = 'white';
+    context.stroke();
+    context.closePath();
+
+    context.beginPath();
+    context.arc(0, 0, 85, Math.PI, Math.PI * 2.5, false);
+    context.lineWidth = 8;
+    context.lineCap = "round";
+    context.strokeStyle = 'rgba(184, 194, 38, 0.15)';
+    context.shadowBlur = 30;
+    context.shadowColor = 'rgba(184, 194, 38, 1)';
+    context.stroke();
+    context.closePath();
+
+    context.restore();
+
+    angle += 0.05;
 
     requestAnimationFrame(animate);
 }
