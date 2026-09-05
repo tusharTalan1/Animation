@@ -12,17 +12,23 @@ let x = 99;
 let y = 99;
 
 class Star {
-    constructor(height, width){
-        this.radius = Math.random();
+    constructor(height, width) {
+        this.radius = Math.random() * 1.5;
         this.x = Math.random() * width;
         this.y = Math.random() * height;
+        this.alpha = Math.random();
+        this.alphaChange = (Math.random() * 0.02) + 0.005;
     }
 
+    makeStar() {
+        this.alpha += this.alphaChange;
+        if (this.alpha <= 0 || this.alpha >= 1) {
+            this.alphaChange = -this.alphaChange;
+        }
 
-    makeStar(){
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        context.fillStyle = "white";
+        context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
         context.fill();
         context.closePath();
     }
