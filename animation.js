@@ -35,7 +35,10 @@ function handleMouseMove(e) {
 }
 
 function handleMouseClick(e) {
-    const colors = ['#ff5733', '#33ff57', '#3357ff', '#ff33a1', '#ffc300', '#00ffff'];
+    const colors = [
+        '#8B5A2B', '#A0522D', '#CD853F', '#DEB887', 
+        '#5F9EA0', '#4682B4', '#708090', '#BDB76B', '#E9967A'
+    ];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const radius = Math.random() * 8 + 8;
     planets.push(new Planet(e.clientX, e.clientY, radius, color));
@@ -138,12 +141,10 @@ class Planet {
             this.radius
         );
         grad.addColorStop(0, '#ffffff');
-        grad.addColorStop(0.4, this.color);
-        grad.addColorStop(1, '#111111');
+        grad.addColorStop(0.2, this.color);
+        grad.addColorStop(1, '#000000');
 
         context.fillStyle = grad;
-        context.shadowBlur = 20;
-        context.shadowColor = this.color;
         context.fill();
         context.closePath();
         context.restore();
