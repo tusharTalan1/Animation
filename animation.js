@@ -7,6 +7,7 @@ let x = canvas.width / 2;
 let y = canvas.height / 2;
 let speed = 0.01;
 let angle = 0;
+let bhScale = Math.min(canvas.width, canvas.height) / 1080;
 
 const mouse = { x: undefined, y: undefined };
 
@@ -18,6 +19,7 @@ window.addEventListener('mousemove', (e) => {
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    bhScale = Math.min(canvas.width, canvas.height) / 1080;
 });
 
 class Star{
@@ -33,20 +35,21 @@ class Star{
         this.alpha += this.alphaChange;
         if (this.alpha <= 0 || this.alpha >= 1){
             this.alphaChange = -this.alphaChange;
+
         }
 
         const dx = x - this.x;
         const dy = y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 200){
+        if (distance < 200 * bhScale){
             this.x += dx * 0.005;
             this.y += dy * 0.005;
             this.x += (dy / distance) * 4;
             this.y -= (dx / distance) * 4;
         }
 
-        if (distance < 65){
+        if (distance < 65 * bhScale){
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             return;
@@ -78,13 +81,13 @@ function drawGrid(){
             let dy = y - j;
             let distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 50){
+            if (distance < 50 * bhScale){
                 isDrawing = false;
                 continue;
             }
 
             let force = 12000 / distance;
-            if (force > distance - 50) force = distance - 50;
+            if (force > distance - 50 * bhScale) force = distance - 50 * bhScale;
 
             let warpedX = i + (dx / distance) * force;
             let warpedY = j + (dy / distance) * force;
@@ -129,7 +132,7 @@ function drawGrid(){
     }
 }
 
-function animate(){
+function animate(){   
     context.fillStyle = 'rgba(0, 0, 0, 0.1)';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -144,7 +147,7 @@ function animate(){
         y += (mouse.y - y) * speed;
     }
 
-    const gradient = context.createRadialGradient(x, y, 50, x, y, 100);
+    const gradient = context.createRadialGradient(x, y, 50 * bhScale, x, y, 100 * bhScale);
     gradient.addColorStop(0, 'black');
     gradient.addColorStop(0.1, 'hsla(49, 96%, 76%, 1.00)');
     gradient.addColorStop(0.4, 'rgba(184, 194, 38, 0.65)');
@@ -154,7 +157,7 @@ function animate(){
     context.shadowBlur = 40;
     context.shadowColor = 'rgba(184, 194, 38, 1)';
     context.beginPath();
-    context.arc(x, y, 90, 0, Math.PI * 2, false);
+    context.arc(x, y, 90 * bhScale, 0, Math.PI * 2, false);
     context.fillStyle = gradient;
     context.fill();
     context.closePath();
@@ -167,7 +170,7 @@ function animate(){
     context.globalCompositeOperation = "lighter";
 
     context.beginPath();
-    context.arc(0, 0, 70, 0, Math.PI * 1.2, false);
+    context.arc(0, 0, 70 * bhScale, 0, Math.PI * 1.2, false);
     context.lineWidth = 5;
     context.lineCap = "round";
     context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
@@ -177,7 +180,7 @@ function animate(){
     context.closePath();
 
     context.beginPath();
-    context.arc(0, 0, 85, Math.PI, Math.PI * 2.5, false);
+    context.arc(0, 0, 85 * bhScale, Math.PI, Math.PI * 2.5, false);
     context.lineWidth = 8;
     context.lineCap = "round";
     context.strokeStyle = 'rgba(184, 194, 38, 0.15)';
